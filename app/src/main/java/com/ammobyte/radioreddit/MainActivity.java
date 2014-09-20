@@ -6,8 +6,12 @@ import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,9 +21,15 @@ import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+
+import java.io.InputStream;
+import java.util.concurrent.ExecutionException;
 
 
 public class MainActivity extends Activity
@@ -38,26 +48,11 @@ public class MainActivity extends Activity
     static final String URL = "http://radioreddit.com/api/status.xml";
     static final String IMAGE_DEFAULT_URL = "http://radioreddit.com/images/noimage.png";
 
-    static final String PARENT = "song";
-    static final String TITLE = "title";
-    static final String ARTIST = "artist";
-    static final String GENRE = "genre";
-    static final String SCORE = "score";
-    static final String A_ITUNES = "itunes_art";
-    static final String A_BANDCAMP = "bandcamp_art";
-
-    String song;
-    String genre;
-    String score;
+    XmlParser parser = new XmlParser();
+    NodeList nl;
 
     TextView tvSong;
     TextView tvGenre;
-    TextView tvScore;
-
-    XmlParser xmlparser;
-    NodeList nl;
-
-    Button button_refresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +67,40 @@ public class MainActivity extends Activity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        tvSong=(TextView)findViewById(R.id.main_song);
+        tvGenre=(TextView)findViewById(R.id.main_genre);
+
+        refreshValues();
+
+    }
+
+    private void refreshValues(){
+        String xml = "";
+        try{
+            xml = parser.getXMLFromURL(URL); // getting XML
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        Document doc = parser.getDomElement(xml); // getting DOM element
+
+        nl = doc.getElementsByTagName("song");
+
+        Element e = (Element) nl.item(0);
+        //score = "Score: "+parser.getValue(e, SCORE);
+
+        tvSong.setText(parser.getValue(e, "artist")+" - "+parser.getValue(e, "title"));
+        tvGenre.setText(parser.getValue(e, "genre"));
+        //tvScore.setText(score);
+
+        String iURL = "http://radioreddit.com/api/status.xml";
+
+        //if(e.hasAttribute("itunes_art"))
+        //    new DownloadImageTask((ImageView) findViewById(R.id.main_art)).execute(parser.getValue(e, "itunes_art"));
+        //else
+        //    new DownloadImageTask((ImageView) findViewById(R.id.main_art)).execute(parser.getValue(e, IMAGE_DEFAULT_URL));
     }
 
     @Override
@@ -170,4 +199,28 @@ public class MainActivity extends Activity
         }
     }
 
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
+    }
 }

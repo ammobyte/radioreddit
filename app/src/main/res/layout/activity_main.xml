@@ -5,6 +5,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#DBDBDB"
     tools:context=".MainActivity">
 
     <!-- As the main content view, the view below consumes the entire
@@ -12,7 +13,48 @@
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent" >
+
+        <ImageView
+            android:id="@+id/rectimage"
+            android:layout_height="120dp"
+            android:layout_width="280dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="40dp"
+            android:src="@drawable/rectangle">
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/main_art"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/no_art"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="40dp" />
+
+        <TextView
+            android:id="@+id/main_genre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/genre"
+            android:layout_marginStart="165dp"
+            android:layout_marginTop="45dp"/>
+        <TextView
+            android:id="@+id/main_prefix"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Now Playing:"
+            android:layout_marginStart="175dp"
+            android:layout_marginTop="65dp"/>
+
+        <TextView
+            android:id="@+id/main_song"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/song"
+            android:layout_marginStart="175dp"
+            android:layout_marginTop="85dp"/>
+    </FrameLayout>
 
     <!-- android:layout_gravity="start" tells DrawerLayout to treat
          this as a sliding drawer on the left side for left-to-right
@@ -27,5 +69,6 @@
         android:layout_gravity="start"
         android:name="com.ammobyte.radioreddit.NavigationDrawerFragment"
         tools:layout="@layout/fragment_navigation_drawer" />
+
 
 </android.support.v4.widget.DrawerLayout>
