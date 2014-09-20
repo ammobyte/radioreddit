@@ -13,5 +13,16 @@
     <string name="genre">Genre</string>
     <string name="score">Score</string>
     <string name="refresh">Refresh</string>
+    <string name="info_filler">-</string>
+    <string name="playing_music">radio reddit is playing</string>
+    <string name="network_error">please improve your internet connection and try again</string>
+    <string name="loading_notification">Loading…</string>
+    <string name="not_logged_in">not logged in</string>
+    <string name="not_submitted">this song hasn\'t been submitted to reddit yet</string>
+    <string name="already_logged_out">you are already logged out</string>
+    <string name="now_logged_out">you are now logged out</string>
+    <string name="now_logged_in_as">now logged in as</string>
+
+
 
 </resources>

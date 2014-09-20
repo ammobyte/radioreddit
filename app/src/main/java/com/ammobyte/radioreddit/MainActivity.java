@@ -16,7 +16,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
+
+import org.w3c.dom.NodeList;
 
 
 public class MainActivity extends Activity
@@ -31,6 +34,30 @@ public class MainActivity extends Activity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
+
+    static final String URL = "http://radioreddit.com/api/status.xml";
+    static final String IMAGE_DEFAULT_URL = "http://radioreddit.com/images/noimage.png";
+
+    static final String PARENT = "song";
+    static final String TITLE = "title";
+    static final String ARTIST = "artist";
+    static final String GENRE = "genre";
+    static final String SCORE = "score";
+    static final String A_ITUNES = "itunes_art";
+    static final String A_BANDCAMP = "bandcamp_art";
+
+    String song;
+    String genre;
+    String score;
+
+    TextView tvSong;
+    TextView tvGenre;
+    TextView tvScore;
+
+    XmlParser xmlparser;
+    NodeList nl;
+
+    Button button_refresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
